@@ -10,13 +10,19 @@ but WITHOUT ANY WARRANTY.
 
 #include "stdafx.h"
 #include <iostream>
+#include <math.h>
 #include "Dependencies\glew.h"
 #include "Dependencies\freeglut.h"
 
 #include "Renderer.h"
 #include "Object.h"
 
+using namespace std;
 Renderer *g_Renderer = NULL;
+
+Object qwe(0, 50, 0, 20, 1, 0, 0, 1, 2, -1);
+float posXbuf;
+float posYbuf;
 
 void RenderScene(void)
 {
@@ -25,9 +31,8 @@ void RenderScene(void)
 
 	// Renderer Test
 	//g_Renderer->DrawSolidRect(0, 0, 0, 4, 1, 0, 1, 1);
-	Object qwe(0, 0, 0, 20, 1, 0, 0, 1);
 	g_Renderer->DrawSolidRect(qwe.getX(), qwe.getY(), qwe.getZ(), qwe.getSize(), qwe.getR(), qwe.getG(), qwe.getB(), qwe.getA());
-
+	qwe.Update();
 	glutSwapBuffers();
 }
 
@@ -38,6 +43,17 @@ void Idle(void)
 
 void MouseInput(int button, int state, int x, int y)
 {
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
+		posXbuf = x;
+		posYbuf = y;
+	}
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_UP) {
+		if (abs(posXbuf - x) < 5 && abs(posYbuf - y) < 5) {
+			qwe.setX(x - 250);
+			qwe.setY(250 - y);
+		}
+	}
+	
 	RenderScene();
 }
 

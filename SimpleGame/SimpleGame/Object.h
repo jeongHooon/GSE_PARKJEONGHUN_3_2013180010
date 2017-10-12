@@ -1,4 +1,6 @@
 #pragma once
+#include <iostream>
+using namespace std;
 class Object
 {
 	float x;
@@ -9,9 +11,13 @@ class Object
 	float g;
 	float b;
 	float a;
+	float velocityX;
+	float velocityY;
+public:
+	const float time = 0.1;
 public:
 	Object();
-	Object(float x, float y, float z, float size, float r, float g, float b, float a) :x(x), y(y), z(z), size(size), r(r), g(g), b(b), a(a){}
+	Object(float x, float y, float z, float size, float r, float g, float b, float a, float velocityX, float velocityY) :x(x), y(y), z(z), size(size), r(r), g(g), b(b), a(a), velocityX(velocityX), velocityY(velocityY) {}
 	void setX(float q) { x = q; }
 	void setY(float q) { y = q; }
 	void setZ(float q) { z = q; }
@@ -20,6 +26,9 @@ public:
 	void setG(float q) { g = q; }
 	void setB(float q) { b = q; }
 	void setA(float q) { a = q; }
+	void setVelocityX(float q) { velocityX = q; }
+	void setVelocityY(float q) { velocityY = q; }
+
 	float getX() { return x; }
 	float getY() { return y; }
 	float getZ() { return z; }
@@ -28,6 +37,28 @@ public:
 	float getG() { return g; }
 	float getB() { return b; }
 	float getA() { return a; }
+	float getVelocityX(){ return velocityX; }
+	float getVelocityY(){ return velocityY; }
+
+	void Update() {
+		setX(getX() + (getVelocityX() * time));
+		setY(getY() + (getVelocityY() * time));
+
+		if (getX() >= 250 || getX() <= -250)
+			setVelocityX(getVelocityX() * -1);
+		if (getY() >= 250 || getY() <= -250)
+			setVelocityY(getVelocityY() * -1);
+
+		if (getR()) {
+			setR(0);
+			setB(1);
+		}
+		else if (getB()) {
+			setR(1);
+			setB(0);
+		}
+		
+	}
 	~Object();
 };
 
