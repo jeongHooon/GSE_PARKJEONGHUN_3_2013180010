@@ -26,7 +26,7 @@ void RenderScene(void)
 	// Renderer Test
 	//g_Renderer->DrawSolidRect(0, 0, 0, 4, 1, 0, 1, 1);
 	Object qwe(0, 0, 0, 20, 1, 0, 0, 1);
-	g_Renderer->DrawSolidRect(qwe.setX(), qwe.setY(), qwe.setZ(), qwe.setSize(), qwe.setR(), qwe.setG(), qwe.setB(), qwe.setA());
+	g_Renderer->DrawSolidRect(qwe.getX(), qwe.getY(), qwe.getZ(), qwe.getSize(), qwe.getR(), qwe.getG(), qwe.getB(), qwe.getA());
 
 	glutSwapBuffers();
 }
