@@ -10,16 +10,21 @@ but WITHOUT ANY WARRANTY.
 
 #include "stdafx.h"
 #include <iostream>
+#include <random>
 #include <math.h>
 #include "Dependencies\glew.h"
 #include "Dependencies\freeglut.h"
 
 #include "Renderer.h"
 #include "Object.h"
-
+#include "SceneMgr.h"
 using namespace std;
 Renderer *g_Renderer = NULL;
 
+
+
+SceneMgr asd;
+//asd.makeObject();
 Object qwe(0, 50, 0, 20, 1, 0, 0, 1, 2, -1);
 float posXbuf;
 float posYbuf;
@@ -28,10 +33,16 @@ void RenderScene(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(0.0f, 0.3f, 0.3f, 1.0f);
-
+	
 	// Renderer Test
-	g_Renderer->DrawSolidRect(qwe.getX(), qwe.getY(), qwe.getZ(), qwe.getSize(), qwe.getR(), qwe.getG(), qwe.getB(), qwe.getA());
-	qwe.Update();
+
+	//g_Renderer->DrawSolidRect(qwe.getX(), qwe.getY(), qwe.getZ(), qwe.getSize(), qwe.getR(), qwe.getG(), qwe.getB(), qwe.getA());
+	//qwe.Update();
+	for (int i = 0; i < MAX_OBJECTS_COUNT; ++i)
+		g_Renderer->DrawSolidRect(asd.ert[i].getX(), asd.ert[i].getY(), asd.ert[i].getZ(), asd.ert[i].getSize(), asd.ert[i].getR(), asd.ert[i].getG(), asd.ert[i].getB(), asd.ert[i].getA());
+		
+	asd.updateObject();
+	
 	glutSwapBuffers();
 }
 
@@ -74,7 +85,7 @@ int main(int argc, char **argv)
 	glutInitWindowPosition(0, 0);
 	glutInitWindowSize(500, 500);
 	glutCreateWindow("Game Software Engineering KPU");
-
+	
 	glewInit();
 	if (glewIsSupported("GL_VERSION_3_0"))
 	{
@@ -84,7 +95,6 @@ int main(int argc, char **argv)
 	{
 		std::cout << "GLEW 3.0 not supported\n ";
 	}
-
 	// Initialize Renderer
 	g_Renderer = new Renderer(500, 500);
 	if (!g_Renderer->IsInitialized())
@@ -100,7 +110,7 @@ int main(int argc, char **argv)
 
 	glutMainLoop();
 
-	delete g_Renderer;
+	//delete g_Renderer;
 
     return 0;
 }

@@ -18,6 +18,7 @@ public:
 public:
 	Object();
 	Object(float x, float y, float z, float size, float r, float g, float b, float a, float velocityX, float velocityY) :x(x), y(y), z(z), size(size), r(r), g(g), b(b), a(a), velocityX(velocityX), velocityY(velocityY) {}
+	void setAll(float x, float y, float z, float size, float r, float g, float b, float a, float velocityX, float velocityY);
 	void setX(float q) { x = q; }
 	void setY(float q) { y = q; }
 	void setZ(float q) { z = q; }
@@ -49,14 +50,6 @@ public:
 		if (getY() >= 250 || getY() <= -250)
 			setVelocityY(getVelocityY() * -1);
 
-		if (getR()) {
-			setR(0);
-			setB(1);
-		}
-		else if (getB()) {
-			setR(1);
-			setB(0);
-		}
 		
 	}
 	~Object();
