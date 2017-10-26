@@ -41,7 +41,7 @@ void RenderScene(void)
 	asd.updateObject();
 	asd.check();
 	for (int i = 0; i < MAX_OBJECTS_COUNT; ++i)
-		g_Renderer->DrawSolidRect(asd.ert[i].getX(), asd.ert[i].getY(), asd.ert[i].getZ(), asd.ert[i].getSize(), asd.ert[i].getR(), asd.ert[i].getG(), asd.ert[i].getB(), asd.ert[i].getA());
+		g_Renderer->DrawSolidRect(asd.ert[i]->getX(), asd.ert[i]->getY(), asd.ert[i]->getZ(), asd.ert[i]->getSize(), asd.ert[i]->getR(), asd.ert[i]->getG(), asd.ert[i]->getB(), asd.ert[i]->getA());
 		
 	glutSwapBuffers();
 }
