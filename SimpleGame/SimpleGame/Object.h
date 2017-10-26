@@ -13,6 +13,7 @@ class Object
 	float a;
 	float velocityX;
 	float velocityY;
+	float life;
 public:
 	const float time = 0.1;
 public:
@@ -41,17 +42,7 @@ public:
 	float getVelocityX(){ return velocityX; }
 	float getVelocityY(){ return velocityY; }
 
-	void Update() {
-		setX(getX() + (getVelocityX() * time));
-		setY(getY() + (getVelocityY() * time));
-
-		if (getX() >= 250 || getX() <= -250)
-			setVelocityX(getVelocityX() * -1);
-		if (getY() >= 250 || getY() <= -250)
-			setVelocityY(getVelocityY() * -1);
-
-		
-	}
+	void Update(float eTime);
 	~Object();
 };
 

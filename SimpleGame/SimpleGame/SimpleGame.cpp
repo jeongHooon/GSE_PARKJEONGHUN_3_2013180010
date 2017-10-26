@@ -12,37 +12,32 @@ but WITHOUT ANY WARRANTY.
 #include <iostream>
 #include <random>
 #include <math.h>
+#include <chrono>
 #include "Dependencies\glew.h"
 #include "Dependencies\freeglut.h"
-
-#include "Renderer.h"
 #include "Object.h"
 #include "SceneMgr.h"
 using namespace std;
-Renderer *g_Renderer = NULL;
 
-
-
-SceneMgr asd;
-//asd.makeObject();
-Object qwe(0, 50, 0, 20, 1, 0, 0, 1, 2, -1);
+SceneMgr* asd = NULL;
 float posXbuf;
 float posYbuf;
-
+auto startTime = chrono::system_clock::now();
 void RenderScene(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(0.0f, 0.3f, 0.3f, 1.0f);
 	
 	// Renderer Test
-
-	//g_Renderer->DrawSolidRect(qwe.getX(), qwe.getY(), qwe.getZ(), qwe.getSize(), qwe.getR(), qwe.getG(), qwe.getB(), qwe.getA());
-	//qwe.Update();
-	asd.updateObject();
-	asd.check();
-	for (int i = 0; i < MAX_OBJECTS_COUNT; ++i)
-		g_Renderer->DrawSolidRect(asd.ert[i]->getX(), asd.ert[i]->getY(), asd.ert[i]->getZ(), asd.ert[i]->getSize(), asd.ert[i]->getR(), asd.ert[i]->getG(), asd.ert[i]->getB(), asd.ert[i]->getA());
-		
+	auto endTime = chrono::system_clock::now();
+	auto resultTime = endTime - startTime;
+	startTime = endTime;
+	auto msec = chrono::duration_cast<chrono::milliseconds>(resultTime);
+	cout << "경과시간 - " << msec.count() << "mSec" << endl;
+	asd->updateObject((float)msec.count());
+	asd->check();
+	asd->draw();
+	
 	glutSwapBuffers();
 }
 
@@ -59,11 +54,10 @@ void MouseInput(int button, int state, int x, int y)
 	}
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_UP) {
 		if (abs(posXbuf - x) < 5 && abs(posYbuf - y) < 5) {
-			qwe.setX(x - 250);
-			qwe.setY(250 - y);
+			
+			asd->makeObject(x - 250, 250 - y);
 		}
 	}
-	
 	RenderScene();
 }
 
@@ -96,11 +90,12 @@ int main(int argc, char **argv)
 		std::cout << "GLEW 3.0 not supported\n ";
 	}
 	// Initialize Renderer
-	g_Renderer = new Renderer(500, 500);
+	asd = new SceneMgr;
+	/*g_Renderer = new Renderer(500, 500);
 	if (!g_Renderer->IsInitialized())
 	{
 		std::cout << "Renderer could not be initialized.. \n";
-	}
+	}*/
 
 	glutDisplayFunc(RenderScene);
 	glutIdleFunc(Idle);

@@ -32,6 +32,21 @@ void Object::setAll(float x1, float y1, float z1, float size1, float r1, float g
 }
 
 
+void Object::Update(float eTime) {
+	float eTimeInSecond = eTime / 1.f;
+
+	setX(getX() + (getVelocityX() * eTimeInSecond));
+	setY(getY() + (getVelocityY() * eTimeInSecond));
+
+	if (getX() >= 250 || getX() <= -250)
+		setVelocityX(getVelocityX() * -1);
+	if (getY() >= 250 || getY() <= -250)
+		setVelocityY(getVelocityY() * -1);
+
+
+}
+
 Object::~Object()
 {
+	
 }
