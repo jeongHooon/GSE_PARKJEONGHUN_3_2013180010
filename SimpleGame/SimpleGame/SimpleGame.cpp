@@ -1,6 +1,5 @@
 /*
 Copyright 2017 Lee Taek Hee (Korea Polytech University)
-
 This program is free software: you can redistribute it and/or modify
 it under the terms of the What The Hell License. Do it plz.
 
