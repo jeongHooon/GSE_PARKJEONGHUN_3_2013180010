@@ -53,8 +53,7 @@ void MouseInput(int button, int state, int x, int y)
 	}
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_UP) {
 		if (abs(posXbuf - x) < 5 && abs(posYbuf - y) < 5) {
-			
-			asd->makeObject(x - 250, 250 - y);
+			asd->makeObject(x - 250, 250 - y,OBJECT_CHARACTER);
 		}
 	}
 	RenderScene();

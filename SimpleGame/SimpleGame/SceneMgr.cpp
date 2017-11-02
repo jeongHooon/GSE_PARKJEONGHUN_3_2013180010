@@ -3,8 +3,9 @@
 #include <random>
 default_random_engine dre;
 uniform_int_distribution<int> ui(-250, 250);
-uniform_int_distribution<int> ui2(-1, 1);
+uniform_real_distribution<float> ui2(-1, 1);
 int i = 0;
+int sumTime = 0;
 SceneMgr::SceneMgr()
 {
 	g_Renderer = new Renderer(500, 500);
@@ -18,50 +19,61 @@ SceneMgr::SceneMgr()
 		ert[i] = NULL;
 		//ert[i]->setAll(ui(dre), ui(dre), ui(dre), 20, 1, 1, 1, 1, ui2(dre), ui2(dre));
 	}
+	makeObject(0, 0, OBJECT_BUILDING);
+	
 }
 
-void SceneMgr::makeObject(float x, float y)
+void SceneMgr::makeObject(float x, float y, int type)
 {
-
 	ert[i] = new Object;
-	ert[i]->setAll(x, y, 0, 20, 1, 1, 1, 1, ui2(dre), ui2(dre));
+	if (type == OBJECT_BUILDING)
+		ert[i]->setAll(x, y, 0, 50, 1, 1, 0, 1, 0, 0, 0, 1000, 10000000, OBJECT_BUILDING);
+	else if (type == OBJECT_CHARACTER)
+		ert[i]->setAll(x, y, 0, 10, 1, 1, 1, 1, ui2(dre), ui2(dre), 300, 100, 10000000, OBJECT_CHARACTER);
+	else if (type == OBJECT_ARROW)
+		ert[i]->setAll(x, y, 0, 2, 0, 0, 1, 1, ui2(dre), ui2(dre), 100, 100, 10000000, OBJECT_ARROW);
+	else if (type == OBJECT_BULLET)
+		ert[i]->setAll(x, y, 0, 2, 1, 0, 0, 1, ui2(dre), ui2(dre), 300, 20, 10000000, OBJECT_BULLET);
+	else
+		;
 	++i;
 }
 
 void SceneMgr::updateObject(float eTime) {
 	for (int i = 0; i < MAX_OBJECTS_COUNT; ++i)
-		if (ert[i] == NULL)
-			continue;
-		else
+		if (ert[i] != NULL)
 			ert[i]->Update(eTime);
+	sumTime += eTime;
+	sumTime = sumTime % 500;
+	if (sumTime <2 && sumTime >= 0)
+		makeObject(0, 0, OBJECT_BULLET);
 }
 
 void SceneMgr::draw() {
 	for (int i = 0; i < MAX_OBJECTS_COUNT; ++i)
 	{
-		if (ert[i] == NULL)
-			continue;
-		else
+		if (ert[i] != NULL)
 			g_Renderer->DrawSolidRect(ert[i]->getX(), ert[i]->getY(), ert[i]->getZ(), ert[i]->getSize(), ert[i]->getR(), ert[i]->getG(), ert[i]->getB(), ert[i]->getA());
 	}
 }
 
 void SceneMgr::check() {
-	for (int i = 0; i < MAX_OBJECTS_COUNT; ++i) {
+	/*for (int i = 0; i < MAX_OBJECTS_COUNT; ++i) {
 		if (ert[i] == NULL)
 			continue;
-		else
+		else if (ert[i]->getType() == OBJECT_BUILDING) {
+			ert[i]->setR(1); ert[i]->setG(1); ert[i]->setB(0);
+		}
+		else if (ert[i]->getType() == OBJECT_CHARACTER) {
 			ert[i]->setR(1); ert[i]->setG(1); ert[i]->setB(1);
-	}
+		}
+	}*/
 	for (int i = 0; i < MAX_OBJECTS_COUNT; ++i)
-		if (ert[i] == NULL)
-			continue;
-		else
+		if (ert[i] != NULL)
 		{
 			for (int j = 0; j < MAX_OBJECTS_COUNT; ++j) {
-				if (ert[j] == NULL)
-					continue;
-				else {
+				if (ert[j] != NULL)
+				{
 					if (i != j) {
 						if ((ert[i]->getX() - ert[i]->getSize() / 2) > (ert[j]->getX() + ert[j]->getSize() / 2))
 							;
@@ -72,12 +84,34 @@ void SceneMgr::check() {
 						else if ((ert[i]->getY() + ert[i]->getSize() / 2) < (ert[j]->getY() - ert[j]->getSize() / 2))
 							;
 						else {
-							ert[i]->setR(1); ert[i]->setG(0); ert[i]->setB(0);
-							ert[j]->setR(1); ert[j]->setG(0); ert[j]->setB(0);
+							if (ert[i]->getType() == OBJECT_BUILDING && ert[j]->getType() == OBJECT_CHARACTER) {
+								//ert[i]->setR(1); ert[i]->setG(0); ert[i]->setB(0);
+								ert[i]->setLife(ert[i]->getLife() - ert[j]->getLife());
+								delete ert[j];
+								ert[j] = NULL;
+							}
+							else if (ert[i]->getType() == OBJECT_CHARACTER && ert[j]->getType() == OBJECT_BULLET) {
+								//ert[i]->setR(1); ert[i]->setG(0); ert[i]->setB(0);
+								ert[i]->setLife(ert[i]->getLife() - ert[j]->getLife());
+								delete ert[j];
+								ert[j] = NULL;
+							}
+							else if (ert[i]->getType() == OBJECT_CHARACTER && ert[j]->getType() == OBJECT_CHARACTER)
+								;
 						}
 					}
 				}
 			}
+		}
+
+	for (int i = 0; i < MAX_OBJECTS_COUNT; ++i)
+		if (ert[i] != NULL)
+		{
+			if (ert[i]->getLife() <= 0) {
+				delete ert[i];
+				ert[i] = NULL;
+			}
+
 		}
 }
 
