@@ -28,12 +28,24 @@ void SceneMgr::makeObject(float x, float y, int type)
 	ert[i] = new Object;
 	if (type == OBJECT_BUILDING)
 		ert[i]->setAll(x, y, 0, 50, 1, 1, 0, 1, 0, 0, 0, 1000, 10000000, OBJECT_BUILDING);
-	else if (type == OBJECT_CHARACTER)
-		ert[i]->setAll(x, y, 0, 10, 1, 1, 1, 1, ui2(dre), ui2(dre), 300, 100, 10000000, OBJECT_CHARACTER);
-	else if (type == OBJECT_ARROW)
-		ert[i]->setAll(x, y, 0, 2, 0, 0, 1, 1, ui2(dre), ui2(dre), 100, 100, 10000000, OBJECT_ARROW);
-	else if (type == OBJECT_BULLET)
-		ert[i]->setAll(x, y, 0, 2, 1, 0, 0, 1, ui2(dre), ui2(dre), 300, 20, 10000000, OBJECT_BULLET);
+	else if (type == OBJECT_CHARACTER) {
+		float a = ui2(dre);
+		float b = ui2(dre);
+		normalize(&a, &b);
+		ert[i]->setAll(x, y, 0, 10, 1, 1, 1, 1, a, b, 300, 100, 10000000, OBJECT_CHARACTER);
+	}
+	else if (type == OBJECT_ARROW) {
+		float a = ui2(dre);
+		float b = ui2(dre);
+		normalize(&a, &b);
+		ert[i]->setAll(x, y, 0, 2, 0, 0, 1, 1, a, b, 100, 100, 10000000, OBJECT_ARROW);
+	}
+	else if (type == OBJECT_BULLET) {
+		float a = ui2(dre);
+		float b = ui2(dre);
+		normalize(&a, &b);
+		ert[i]->setAll(x, y, 0, 2, 1, 0, 0, 1, a, b, 300, 20, 10000000, OBJECT_BULLET);
+	}
 	else
 		;
 	++i;
@@ -44,9 +56,10 @@ void SceneMgr::updateObject(float eTime) {
 		if (ert[i] != NULL)
 			ert[i]->Update(eTime);
 	sumTime += eTime;
-	sumTime = sumTime % 500;
-	if (sumTime <2 && sumTime >= 0)
+	if (sumTime >= 500) {
 		makeObject(0, 0, OBJECT_BULLET);
+		sumTime -= 500;
+	}
 }
 
 void SceneMgr::draw() {
@@ -111,8 +124,14 @@ void SceneMgr::check() {
 				delete ert[i];
 				ert[i] = NULL;
 			}
-
 		}
+}
+
+void SceneMgr::normalize(float* a, float* b)
+{
+	float i = sqrt((*a)*(*a) + (*b)*(*b));
+	(*a) /= i;
+	(*b) /= i;
 }
 
 

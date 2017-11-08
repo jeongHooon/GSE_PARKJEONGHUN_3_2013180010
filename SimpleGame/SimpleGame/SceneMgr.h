@@ -6,7 +6,7 @@
 #define OBJECT_CHARACTER 02
 #define OBJECT_BULLET 03
 #define OBJECT_ARROW 04
-#define MAX_OBJECTS_COUNT 50
+#define MAX_OBJECTS_COUNT 1000
 
 class SceneMgr
 {
@@ -19,6 +19,7 @@ public:
 	void updateObject(float eTime);
 	void draw();
 	void check();
+	void normalize(float* a, float* b);
 	~SceneMgr();
 };
 
