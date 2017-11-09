@@ -15,7 +15,7 @@ public:
 	Object* ert[MAX_OBJECTS_COUNT];
 public:
 	SceneMgr();
-	void makeObject(float x, float y, int type);
+	void makeObject(float x, float y, int type, int arrow);
 	void updateObject(float eTime);
 	void draw();
 	void check();

@@ -17,12 +17,13 @@ class Object
 	float life;
 	float lifetime;
 	int type;
+	int arrow;
 public:
 	const float time = 0.1;
 public:
 	Object();
-	Object(float x, float y, float z, float size, float r, float g, float b, float a, float dirX, float dirY, float velocity, float life, float lifetime,int type) :x(x), y(y), z(z), size(size), r(r), g(g), b(b), a(a), dirX(dirX), dirY(dirY), velocity(velocity), life(life), lifetime(lifetime),type(type) {}
-	void setAll(float x, float y, float z, float size, float r, float g, float b, float a, float dirX, float dirY, float velocity, float life, float lifetime, int type);
+	Object(float x, float y, float z, float size, float r, float g, float b, float a, float dirX, float dirY, float velocity, float life, float lifetime,int type, int arrow) :x(x), y(y), z(z), size(size), r(r), g(g), b(b), a(a), dirX(dirX), dirY(dirY), velocity(velocity), life(life), lifetime(lifetime),type(type), arrow(arrow) {}
+	void setAll(float x, float y, float z, float size, float r, float g, float b, float a, float dirX, float dirY, float velocity, float life, float lifetime, int type, int arrow);
 	void setX(float q) { x = q; }
 	void setY(float q) { y = q; }
 	void setZ(float q) { z = q; }
@@ -37,6 +38,7 @@ public:
 	void setLife(float q) { life = q; }
 	void setLifeTime(float q) { lifetime = q; }
 	void setType(int q) { type = q; }
+	void setArrow(int q) { arrow = q; }
 
 	float getX() { return x; }
 	float getY() { return y; }
@@ -52,6 +54,7 @@ public:
 	float getLife() { return life; }
 	float getLifeTime() { return lifetime; }
 	int getType() { return type; }
+	int getArrow() { return arrow; }
 
 	void Update(float eTime);
 	~Object();

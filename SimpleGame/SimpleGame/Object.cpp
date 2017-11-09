@@ -16,7 +16,7 @@ Object::Object()
 	dirY = 1;
 }
 
-void Object::setAll(float x1, float y1, float z1, float size1, float r1, float g1, float b1, float a1, float dirX1, float dirY1, float velocity1, float life1, float lifetime1,int type1)
+void Object::setAll(float x1, float y1, float z1, float size1, float r1, float g1, float b1, float a1, float dirX1, float dirY1, float velocity1, float life1, float lifetime1,int type1, int arrow1)
 {
 	x = x1;
 	y = y1;
@@ -32,6 +32,7 @@ void Object::setAll(float x1, float y1, float z1, float size1, float r1, float g
 	life = life1;
 	lifetime = lifetime1;
 	type = type1;
+	arrow = arrow1;
 }
 
 
@@ -61,6 +62,7 @@ void Object::Update(float eTime) {
 	
 	lifetime -= eTimeInSecond;
 
+	
 }
 
 Object::~Object()

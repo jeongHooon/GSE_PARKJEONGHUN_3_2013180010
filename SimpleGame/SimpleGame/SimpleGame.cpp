@@ -25,7 +25,7 @@ auto startTime = chrono::system_clock::now();
 void RenderScene(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearColor(0.0f, 0.3f, 0.3f, 1.0f);
+	glClearColor(0.7f, 1.0f, 1.0f, 1.0f);
 	
 	// Renderer Test
 	auto endTime = chrono::system_clock::now();
@@ -53,7 +53,7 @@ void MouseInput(int button, int state, int x, int y)
 	}
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_UP) {
 		if (abs(posXbuf - x) < 5 && abs(posYbuf - y) < 5) {
-			asd->makeObject(x - 250, 250 - y,OBJECT_CHARACTER);
+			asd->makeObject(x - 250, 250 - y,OBJECT_CHARACTER,-1);
 		}
 	}
 	RenderScene();

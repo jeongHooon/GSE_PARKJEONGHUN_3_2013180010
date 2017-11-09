@@ -6,6 +6,7 @@ uniform_int_distribution<int> ui(-250, 250);
 uniform_real_distribution<float> ui2(-1, 1);
 int i = 0;
 int sumTime = 0;
+GLuint m_texCharacter;
 SceneMgr::SceneMgr()
 {
 	g_Renderer = new Renderer(500, 500);
@@ -19,32 +20,34 @@ SceneMgr::SceneMgr()
 		ert[i] = NULL;
 		//ert[i]->setAll(ui(dre), ui(dre), ui(dre), 20, 1, 1, 1, 1, ui2(dre), ui2(dre));
 	}
-	makeObject(0, 0, OBJECT_BUILDING);
+	m_texCharacter = g_Renderer->CreatePngTexture("./Textures/PNGs/minion.png");
+	
+	makeObject(0, 0, OBJECT_BUILDING, -1);
 	
 }
 
-void SceneMgr::makeObject(float x, float y, int type)
+void SceneMgr::makeObject(float x, float y, int type, int arrow)
 {
 	ert[i] = new Object;
 	if (type == OBJECT_BUILDING)
-		ert[i]->setAll(x, y, 0, 50, 1, 1, 0, 1, 0, 0, 0, 1000, 10000000, OBJECT_BUILDING);
+		ert[i]->setAll(x, y, 0, 50, 1, 1, 0, 1, 0, 0, 0, 500, 10000000, OBJECT_BUILDING, arrow);
 	else if (type == OBJECT_CHARACTER) {
 		float a = ui2(dre);
 		float b = ui2(dre);
 		normalize(&a, &b);
-		ert[i]->setAll(x, y, 0, 10, 1, 1, 1, 1, a, b, 300, 100, 10000000, OBJECT_CHARACTER);
+		ert[i]->setAll(x, y, 0, 10, 1, 1, 1, 1, a, b, 600, 10, 10000000, OBJECT_CHARACTER, arrow);
 	}
 	else if (type == OBJECT_ARROW) {
 		float a = ui2(dre);
 		float b = ui2(dre);
 		normalize(&a, &b);
-		ert[i]->setAll(x, y, 0, 2, 0, 0, 1, 1, a, b, 100, 100, 10000000, OBJECT_ARROW);
+		ert[i]->setAll(x, y, 0, 2, 0, 0, 1, 1, a, b, 100, 10, 10000000, OBJECT_ARROW, arrow);
 	}
 	else if (type == OBJECT_BULLET) {
 		float a = ui2(dre);
 		float b = ui2(dre);
 		normalize(&a, &b);
-		ert[i]->setAll(x, y, 0, 2, 1, 0, 0, 1, a, b, 300, 20, 10000000, OBJECT_BULLET);
+		ert[i]->setAll(x, y, 0, 2, 1, 0, 0, 1, a, b, 300, 20, 10000000, OBJECT_BULLET, arrow);
 	}
 	else
 		;
@@ -53,11 +56,21 @@ void SceneMgr::makeObject(float x, float y, int type)
 
 void SceneMgr::updateObject(float eTime) {
 	for (int i = 0; i < MAX_OBJECTS_COUNT; ++i)
-		if (ert[i] != NULL)
+		if (ert[i] != NULL) {
 			ert[i]->Update(eTime);
+			
+		}
 	sumTime += eTime;
 	if (sumTime >= 500) {
-		makeObject(0, 0, OBJECT_BULLET);
+		for (int i = 0; i < MAX_OBJECTS_COUNT; ++i) {
+			if (ert[i] != NULL) {
+				if (ert[i]->getType() == OBJECT_CHARACTER)
+				{
+					makeObject(ert[i]->getX(), ert[i]->getY(), OBJECT_ARROW, i);
+				}
+			}
+		}
+		makeObject(0, 0, OBJECT_BULLET, -1);
 		sumTime -= 500;
 	}
 }
@@ -66,7 +79,10 @@ void SceneMgr::draw() {
 	for (int i = 0; i < MAX_OBJECTS_COUNT; ++i)
 	{
 		if (ert[i] != NULL)
-			g_Renderer->DrawSolidRect(ert[i]->getX(), ert[i]->getY(), ert[i]->getZ(), ert[i]->getSize(), ert[i]->getR(), ert[i]->getG(), ert[i]->getB(), ert[i]->getA());
+			if(ert[i]->getType() == OBJECT_BUILDING)
+				g_Renderer->DrawTexturedRect(0, 0, 0, 50, 0, 0, 0, 1, m_texCharacter);
+			else
+				g_Renderer->DrawSolidRect(ert[i]->getX(), ert[i]->getY(), ert[i]->getZ(), ert[i]->getSize(), ert[i]->getR(), ert[i]->getG(), ert[i]->getB(), ert[i]->getA());
 	}
 }
 
@@ -98,16 +114,27 @@ void SceneMgr::check() {
 							;
 						else {
 							if (ert[i]->getType() == OBJECT_BUILDING && ert[j]->getType() == OBJECT_CHARACTER) {
-								//ert[i]->setR(1); ert[i]->setG(0); ert[i]->setB(0);
+								ert[i]->setLife(ert[i]->getLife() - ert[j]->getLife());
+								delete ert[j];
+								ert[j] = NULL;
+							}
+							else if (ert[i]->getType() == OBJECT_BUILDING && ert[j]->getType() == OBJECT_ARROW)
+							{
 								ert[i]->setLife(ert[i]->getLife() - ert[j]->getLife());
 								delete ert[j];
 								ert[j] = NULL;
 							}
 							else if (ert[i]->getType() == OBJECT_CHARACTER && ert[j]->getType() == OBJECT_BULLET) {
-								//ert[i]->setR(1); ert[i]->setG(0); ert[i]->setB(0);
 								ert[i]->setLife(ert[i]->getLife() - ert[j]->getLife());
 								delete ert[j];
 								ert[j] = NULL;
+							}
+							else if (ert[i]->getType() == OBJECT_CHARACTER && ert[j]->getType() == OBJECT_ARROW) {
+								if (i != ert[j]->getArrow()) {
+									ert[i]->setLife(ert[i]->getLife() - ert[j]->getLife());
+									delete ert[j];
+									ert[j] = NULL;
+								}
 							}
 							else if (ert[i]->getType() == OBJECT_CHARACTER && ert[j]->getType() == OBJECT_CHARACTER)
 								;
