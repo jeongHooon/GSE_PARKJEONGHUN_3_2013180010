@@ -16,7 +16,7 @@ Object::Object()
 	dirY = 1;
 }
 
-void Object::setAll(float x1, float y1, float z1, float size1, float r1, float g1, float b1, float a1, float dirX1, float dirY1, float velocity1, float life1, float lifetime1,int type1, int arrow1)
+void Object::setAll(float x1, float y1, float z1, float size1, float r1, float g1, float b1, float a1, float dirX1, float dirY1, float velocity1, float life1, float lifetime1,int type1, int teamtype1)
 {
 	x = x1;
 	y = y1;
@@ -32,13 +32,13 @@ void Object::setAll(float x1, float y1, float z1, float size1, float r1, float g
 	life = life1;
 	lifetime = lifetime1;
 	type = type1;
-	arrow = arrow1;
+	teamtype = teamtype1;
 }
 
 
 void Object::Update(float eTime) {
 	float eTimeInSecond = eTime / 1000.f;
-
+	time += eTime;
 	if (getX() + (getDirX() * eTimeInSecond) >= 250) {
 		setX(250);
 		setDirX(getDirX() * -1);
@@ -47,12 +47,12 @@ void Object::Update(float eTime) {
 		setX(-250);
 		setDirX(getDirX() * -1);
 	}
-	else if (getY() + (getDirY() * eTimeInSecond) >= 250) {
-		setY(250);
+	else if (getY() + (getDirY() * eTimeInSecond) >= 400) {
+		setY(400);
 		setDirY(getDirY() * -1);
 	}
-	else if (getY() + (getDirY() * eTimeInSecond) <= -250) {
-		setY(-250);
+	else if (getY() + (getDirY() * eTimeInSecond) <= -400) {
+		setY(-400);
 		setDirY(getDirY() * -1);
 	}
 		setX(getX() + (getDirX() * getVelocity() * eTimeInSecond));

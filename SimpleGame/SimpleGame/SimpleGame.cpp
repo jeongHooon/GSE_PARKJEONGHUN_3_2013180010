@@ -21,18 +21,21 @@ using namespace std;
 SceneMgr* asd = NULL;
 float posXbuf;
 float posYbuf;
-auto startTime = chrono::system_clock::now();
+float timebuf=0;
+chrono::time_point<chrono::system_clock> startTime = chrono::system_clock::now();
 void RenderScene(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(0.7f, 1.0f, 1.0f, 1.0f);
 	
 	// Renderer Test
-	auto endTime = chrono::system_clock::now();
+	chrono::time_point<chrono::system_clock> endTime = chrono::system_clock::now();
 	auto resultTime = endTime - startTime;
 	startTime = endTime;
-	auto msec = chrono::duration_cast<chrono::milliseconds>(resultTime);
-	cout << "경과시간 - " << msec.count() << "mSec" << endl;
+	chrono::milliseconds msec = chrono::duration_cast<chrono::milliseconds>(resultTime);
+	
+	cout << msec.count() << " " << timebuf << endl;
+	timebuf += (float)msec.count();
 	asd->updateObject((float)msec.count());
 	asd->check();
 	asd->draw();
@@ -52,8 +55,9 @@ void MouseInput(int button, int state, int x, int y)
 		posYbuf = y;
 	}
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_UP) {
-		if (abs(posXbuf - x) < 5 && abs(posYbuf - y) < 5) {
-			asd->makeObject(x - 250, 250 - y,OBJECT_CHARACTER,-1);
+		if (abs(posXbuf - x) < 5 && abs(posYbuf - y) < 5 && timebuf >= 7000 && (400-y) <=0 ) {
+			asd->makeObject(x - 250, 400 - y,OBJECT_CHARACTER,TEAM_2);
+			timebuf = 0;
 		}
 	}
 	RenderScene();
@@ -75,7 +79,7 @@ int main(int argc, char **argv)
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
 	glutInitWindowPosition(0, 0);
-	glutInitWindowSize(500, 500);
+	glutInitWindowSize(500, 800);
 	glutCreateWindow("Game Software Engineering KPU");
 	
 	glewInit();

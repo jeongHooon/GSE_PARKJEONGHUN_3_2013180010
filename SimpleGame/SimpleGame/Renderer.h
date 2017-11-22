@@ -44,6 +44,6 @@ private:
 	GLuint m_TextureCharacter = 0;
 	GLuint m_TextureBuilding = 0;
 	GLuint m_TextureBullet = 0;
-	GLuint m_TextureArrow = 0;
+	GLuint m_TextureTeamtype = 0;
 };
 
