@@ -17,11 +17,8 @@ SceneMgr::SceneMgr()
 		std::cout << "Renderer could not be initialized.. \n";
 	}
 	
-	
-	for (int i = 0; i < MAX_OBJECTS_COUNT; ++i) {
-		ert[i] = NULL;
-		//ert[i]->setAll(ui(dre), ui(dre), ui(dre), 20, 1, 1, 1, 1, ui2(dre), ui2(dre));
-	}
+	for (int i = 0; i < MAX_OBJECTS_COUNT; ++i) { ert[i] = NULL; }
+
 	m_texCharacter = g_Renderer->CreatePngTexture("./Textures/PNGs/minion.png");
 	m_texCharacter2 = g_Renderer->CreatePngTexture("./Textures/PNGs/animal.png");
 	
@@ -128,55 +125,7 @@ void SceneMgr::check() {
 								float temp = ert[i]->getLife();
 								ert[i]->setLife(temp - ert[j]->getLife());
 								ert[j]->setLife(ert[j]->getLife() - temp);
-
 							}
-							//if (ert[i]->getType() == OBJECT_BUILDING && ert[j]->getType() == OBJECT_CHARACTER) { //!!!!
-							//	if (ert[i]->getTeamtype() != ert[j]->getTeamtype()) {
-							//		float temp = ert[i]->getLife();
-							//		ert[i]->setLife(temp - ert[j]->getLife());
-							//		ert[j]->setLife(ert[j]->getLife() - temp);
-							//		
-							//	}
-							//}
-							//else if (ert[i]->getType() == OBJECT_BUILDING && ert[j]->getType() == OBJECT_ARROW) //!!!
-							//{
-							//	if (ert[i]->getTeamtype() != ert[j]->getTeamtype()) {
-							//		float temp = ert[i]->getLife();
-							//		ert[i]->setLife(temp - ert[j]->getLife());
-							//		ert[j]->setLife(ert[j]->getLife() - temp);
-
-							//	}
-							//}
-							//else if (ert[i]->getType() == OBJECT_BUILDING && ert[j]->getType() == OBJECT_BULLET)
-							//{
-							//	if (ert[i]->getTeamtype() != ert[j]->getTeamtype()) {
-							//		float temp = ert[i]->getLife();
-							//		ert[i]->setLife(temp - ert[j]->getLife());
-							//		ert[j]->setLife(ert[j]->getLife() - temp);
-							//	}
-							//}
-							//else if (ert[i]->getType() == OBJECT_CHARACTER && ert[j]->getType() == OBJECT_BULLET) { //!!!
-							//	if (ert[i]->getTeamtype() != ert[j]->getTeamtype()) {
-							//		float temp = ert[i]->getLife();
-							//		ert[i]->setLife(temp - ert[j]->getLife());
-							//		ert[j]->setLife(ert[j]->getLife() - temp);
-
-							//	}
-							//}
-							//else if (ert[i]->getType() == OBJECT_CHARACTER && ert[j]->getType() == OBJECT_ARROW) { //!!!
-							//	if (ert[i]->getTeamtype() != ert[j]->getTeamtype()) {
-							//		float temp = ert[i]->getLife();
-							//		ert[i]->setLife(temp - ert[j]->getLife());
-							//		ert[j]->setLife(ert[j]->getLife() - temp);
-
-							//	}
-							//}
-							//else if (ert[i]->getType() == OBJECT_CHARACTER && ert[j]->getType() == OBJECT_CHARACTER)
-							//	if (ert[i]->getTeamtype() != ert[j]->getTeamtype()) {
-							//		float temp = ert[i]->getLife();
-							//		ert[i]->setLife(temp - ert[j]->getLife());
-							//		ert[j]->setLife(ert[j]->getLife() - temp);
-							//	}
 						}
 					}
 				}

@@ -12,6 +12,7 @@ but WITHOUT ANY WARRANTY.
 #include <random>
 #include <math.h>
 #include <chrono>
+#include <Windows.h>
 #include "Dependencies\glew.h"
 #include "Dependencies\freeglut.h"
 #include "Object.h"
@@ -22,21 +23,19 @@ SceneMgr* asd = NULL;
 float posXbuf;
 float posYbuf;
 float timebuf=0;
-chrono::time_point<chrono::system_clock> startTime = chrono::system_clock::now();
+DWORD startTime = timeGetTime();
 void RenderScene(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(0.7f, 1.0f, 1.0f, 1.0f);
 	
 	// Renderer Test
-	chrono::time_point<chrono::system_clock> endTime = chrono::system_clock::now();
-	auto resultTime = endTime - startTime;
+	DWORD endTime = timeGetTime();
+	DWORD resultTime = endTime - startTime;
 	startTime = endTime;
-	chrono::milliseconds msec = chrono::duration_cast<chrono::milliseconds>(resultTime);
 	
-	cout << msec.count() << " " << timebuf << endl;
-	timebuf += (float)msec.count();
-	asd->updateObject((float)msec.count());
+	timebuf += (float)resultTime;
+	asd->updateObject((float)resultTime);
 	asd->check();
 	asd->draw();
 	
@@ -93,11 +92,6 @@ int main(int argc, char **argv)
 	}
 	// Initialize Renderer
 	asd = new SceneMgr;
-	/*g_Renderer = new Renderer(500, 500);
-	if (!g_Renderer->IsInitialized())
-	{
-		std::cout << "Renderer could not be initialized.. \n";
-	}*/
 
 	glutDisplayFunc(RenderScene);
 	glutIdleFunc(Idle);
@@ -106,8 +100,6 @@ int main(int argc, char **argv)
 	glutSpecialFunc(SpecialKeyInput);
 
 	glutMainLoop();
-
-	//delete g_Renderer;
 
     return 0;
 }
