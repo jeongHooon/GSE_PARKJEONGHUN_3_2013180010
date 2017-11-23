@@ -22,10 +22,10 @@ SceneMgr::SceneMgr()
 	m_texCharacter = g_Renderer->CreatePngTexture("./Textures/PNGs/minion.png");
 	m_texCharacter2 = g_Renderer->CreatePngTexture("./Textures/PNGs/animal.png");
 	
-	makeObject(0, 350, OBJECT_BUILDING, TEAM_1);
+	makeObject(0, 340, OBJECT_BUILDING, TEAM_1);
 	makeObject(-150, 300, OBJECT_BUILDING, TEAM_1);
 	makeObject(150, 300, OBJECT_BUILDING, TEAM_1);
-	makeObject(0, -350, OBJECT_BUILDING, TEAM_2);
+	makeObject(0, -340, OBJECT_BUILDING, TEAM_2);
 	makeObject(-150, -300, OBJECT_BUILDING, TEAM_2);
 	makeObject(150, -300, OBJECT_BUILDING, TEAM_2);
 	
@@ -41,9 +41,9 @@ void SceneMgr::makeObject(float x, float y, int type, int teamtype)
 		float b = ui2(dre);
 		normalize(&a, &b);
 		if (teamtype == TEAM_1)
-			ert[i]->setAll(x, y, 0, 10, 1, 0, 0, 1, a, b, 300, 10, 10000000, OBJECT_CHARACTER, teamtype);
+			ert[i]->setAll(x, y, 0, 10, 1, 0, 0, 1, a, b, 300, 100, 10000000, OBJECT_CHARACTER, teamtype);
 		else if (teamtype == TEAM_2)
-			ert[i]->setAll(x, y, 0, 10, 0, 0, 1, 1, a, b, 300, 10, 10000000, OBJECT_CHARACTER, teamtype);
+			ert[i]->setAll(x, y, 0, 10, 0, 0, 1, 1, a, b, 300, 100, 10000000, OBJECT_CHARACTER, teamtype);
 	}
 	else if (type == OBJECT_ARROW) {
 		float a = ui2(dre);
@@ -59,9 +59,9 @@ void SceneMgr::makeObject(float x, float y, int type, int teamtype)
 		float b = ui2(dre);
 		normalize(&a, &b);
 		if (teamtype == TEAM_1)
-			ert[i]->setAll(x, y, 0, 2, 1, 0, 0, 1, a, b, 600, 20, 10000000, OBJECT_BULLET, teamtype);
+			ert[i]->setAll(x, y, 0, 2, 1, 0, 0, 1, a, b, 600, 15, 10000000, OBJECT_BULLET, teamtype);
 		else if (teamtype == TEAM_2)
-			ert[i]->setAll(x, y, 0, 2, 0, 0, 1, 1, a, b, 600, 20, 10000000, OBJECT_BULLET, teamtype);
+			ert[i]->setAll(x, y, 0, 2, 0, 0, 1, 1, a, b, 600, 15, 10000000, OBJECT_BULLET, teamtype);
 	}
 	else
 		;
@@ -92,15 +92,28 @@ void SceneMgr::updateObject(float eTime) {
 void SceneMgr::draw() {
 	for (int i = 0; i < MAX_OBJECTS_COUNT; ++i)
 	{
-		if (ert[i] != NULL)
+		if (ert[i] != NULL) {
 			if (ert[i]->getType() == OBJECT_BUILDING) {
-				if (ert[i]->getTeamtype() == TEAM_1)
-					g_Renderer->DrawTexturedRect(ert[i]->getX(), ert[i]->getY(), ert[i]->getZ(), ert[i]->getSize(), ert[i]->getR(), ert[i]->getG(), ert[i]->getB(), ert[i]->getA(), m_texCharacter);
-				else if (ert[i]->getTeamtype() == TEAM_2)
-					g_Renderer->DrawTexturedRect(ert[i]->getX(), ert[i]->getY(), ert[i]->getZ(), ert[i]->getSize(), ert[i]->getR(), ert[i]->getG(), ert[i]->getB(), ert[i]->getA(), m_texCharacter2);
+				if (ert[i]->getTeamtype() == TEAM_1) {
+					g_Renderer->DrawTexturedRect(ert[i]->getX(), ert[i]->getY(), ert[i]->getZ(), ert[i]->getSize(), ert[i]->getR(), ert[i]->getG(), ert[i]->getB(), ert[i]->getA(), m_texCharacter, 0.1);
+					g_Renderer->DrawSolidRectGauge(ert[i]->getX(), ert[i]->getY() + 50, ert[i]->getZ(), 50, 5, 1, 0, 0, ert[i]->getA(), ert[i]->getLife() / 500, 0.1);
+					//cout << ert[i]->getLife() << endl;
+				}
+				else if (ert[i]->getTeamtype() == TEAM_2) {
+					g_Renderer->DrawTexturedRect(ert[i]->getX(), ert[i]->getY(), ert[i]->getZ(), ert[i]->getSize(), ert[i]->getR(), ert[i]->getG(), ert[i]->getB(), ert[i]->getA(), m_texCharacter2, 0.1);
+					g_Renderer->DrawSolidRectGauge(ert[i]->getX(), ert[i]->getY() + 50, ert[i]->getZ(), 50, 5, 0, 0, 1, ert[i]->getA(), ert[i]->getLife() / 500, 0.1);
+				}
+			}
+			else if (ert[i]->getType() == OBJECT_CHARACTER) {
+				g_Renderer->DrawSolidRect(ert[i]->getX(), ert[i]->getY(), ert[i]->getZ(), ert[i]->getSize(), ert[i]->getR(), ert[i]->getG(), ert[i]->getB(), ert[i]->getA(), 0.2);
+				g_Renderer->DrawSolidRectGauge(ert[i]->getX(), ert[i]->getY()+10, ert[i]->getZ(), 50, 5, ert[i]->getR(), ert[i]->getG(), ert[i]->getB(), ert[i]->getA(), ert[i]->getLife() / 100, 0.2);
 			}
 			else
-				g_Renderer->DrawSolidRect(ert[i]->getX(), ert[i]->getY(), ert[i]->getZ(), ert[i]->getSize(), ert[i]->getR(), ert[i]->getG(), ert[i]->getB(), ert[i]->getA());
+				g_Renderer->DrawSolidRect(ert[i]->getX(), ert[i]->getY(), ert[i]->getZ(), ert[i]->getSize(), ert[i]->getR(), ert[i]->getG(), ert[i]->getB(), ert[i]->getA(), 0.2);
+			
+			
+
+		}
 	}
 }
 
@@ -109,7 +122,7 @@ void SceneMgr::check() {
 		if (ert[i] != NULL)
 		{
 			for (int j = 0; j < MAX_OBJECTS_COUNT; ++j) {
-				if (ert[j] != NULL)
+				if (ert[j] != NULL && ert[i] != NULL)
 				{
 					if (i != j) {
 						if ((ert[i]->getX() - ert[i]->getSize() / 2) > (ert[j]->getX() + ert[j]->getSize() / 2))
@@ -125,6 +138,15 @@ void SceneMgr::check() {
 								float temp = ert[i]->getLife();
 								ert[i]->setLife(temp - ert[j]->getLife());
 								ert[j]->setLife(ert[j]->getLife() - temp);
+								cout << ert[i]->getLife() << " ! " << ert[j]->getLife() << endl;
+							}
+							if (ert[i]->getLife() <= 0) {
+								delete ert[i];
+								ert[i] = NULL;
+							}
+							if (ert[j]->getLife() <= 0) {
+								delete ert[j];
+								ert[j] = NULL;
 							}
 						}
 					}
@@ -132,14 +154,15 @@ void SceneMgr::check() {
 			}
 		}
 
-	for (int i = 0; i < MAX_OBJECTS_COUNT; ++i)
+	/*for (int i = 0; i < MAX_OBJECTS_COUNT; ++i)
 		if (ert[i] != NULL)
 		{
 			if (ert[i]->getLife() <= 0) {
 				delete ert[i];
 				ert[i] = NULL;
 			}
-		}
+			
+		}*/
 }
 
 void SceneMgr::normalize(float* a, float* b)
