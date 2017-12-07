@@ -1,11 +1,13 @@
 #pragma once
 #include <iostream>
+#define OBJECT_BACKGROUND 00
 #define OBJECT_BUILDING 01
 #define OBJECT_CHARACTER 02
 #define OBJECT_BULLET 03
 #define OBJECT_ARROW 04
 #define TEAM_1 10
 #define TEAM_2 20
+#define TEAM_NONE 30
 #define MAX_OBJECTS_COUNT 1000
 using namespace std;
 class Object

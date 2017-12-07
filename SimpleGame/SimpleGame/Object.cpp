@@ -39,6 +39,8 @@ void Object::setAll(float x1, float y1, float z1, float size1, float r1, float g
 void Object::Update(float eTime) {
 	float eTimeInSecond = eTime / 1000.f;
 	time += eTime;
+	if (getType() == OBJECT_BULLET)
+		time -= eTime * 3 / 4;
 	if (getType() == OBJECT_CHARACTER) {
 		if (getX() + (getDirX() * eTimeInSecond) >= 250) {
 			setX(250);
