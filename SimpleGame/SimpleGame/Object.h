@@ -9,6 +9,7 @@
 #define TEAM_2 20
 #define TEAM_NONE 30
 #define MAX_OBJECTS_COUNT 1000
+
 using namespace std;
 class Object
 {

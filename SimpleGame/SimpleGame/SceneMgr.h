@@ -2,11 +2,13 @@
 
 #include "Object.h"
 #include "Renderer.h"
+#include "Sound.h"
 
 
 class SceneMgr
 {
 	Renderer *g_Renderer = NULL;
+	Sound *m_Sound = NULL;
 public:
 	Object* ert[MAX_OBJECTS_COUNT];
 public:

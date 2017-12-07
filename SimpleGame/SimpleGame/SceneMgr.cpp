@@ -12,8 +12,11 @@ GLuint m_texCharacter;
 GLuint m_texCharacter2;
 GLuint m_texBackground;
 GLuint m_particle;
+GLuint soundCS;
+GLuint soundBG;
 SceneMgr::SceneMgr()
 {
+	m_Sound = new Sound();
 	g_Renderer = new Renderer(500, 800);
 	if (!g_Renderer->IsInitialized())
 	{
@@ -27,6 +30,9 @@ SceneMgr::SceneMgr()
 	m_texBackground = g_Renderer->CreatePngTexture("./Textures/PNGs/man.png");
 	m_texCharacterP = g_Renderer->CreatePngTexture("./Textures/PNGs/player1.png");
 	m_particle = g_Renderer->CreatePngTexture("./Textures/PNGs/obtacle3.png");
+	soundBG = m_Sound->CreateSound("./Dependencies/SoundSamples/star4.mp3");
+	soundCS = m_Sound->CreateSound("./Dependencies/SoundSamples/explosion.wav");
+	m_Sound->PlaySound(soundBG, true, 0.2f);
 	makeObject(100, 0, OBJECT_BACKGROUND, TEAM_NONE);
 	makeObject(0, 340, OBJECT_BUILDING, TEAM_1);
 	makeObject(-150, 300, OBJECT_BUILDING, TEAM_1);
@@ -34,7 +40,8 @@ SceneMgr::SceneMgr()
 	makeObject(0, -340, OBJECT_BUILDING, TEAM_2);
 	makeObject(-150, -300, OBJECT_BUILDING, TEAM_2);
 	makeObject(150, -300, OBJECT_BUILDING, TEAM_2);
-	
+
+
 }
 
 void SceneMgr::makeObject(float x, float y, int type, int teamtype)
@@ -127,11 +134,11 @@ void SceneMgr::draw() {
 			}
 			else
 				g_Renderer->DrawSolidRect(ert[i]->getX(), ert[i]->getY(), ert[i]->getZ(), ert[i]->getSize(), ert[i]->getR(), ert[i]->getG(), ert[i]->getB(), ert[i]->getA(), 0.2);
-			
-			
-
 		}
 	}
+	char yy[] = "Game Start";
+	g_Renderer->DrawText(0,0, GLUT_BITMAP_TIMES_ROMAN_24,1,0,0,yy);
+
 }
 
 void SceneMgr::check() {
@@ -157,11 +164,13 @@ void SceneMgr::check() {
 									ert[i]->setLife(temp - ert[j]->getLife());
 									ert[j]->setLife(ert[j]->getLife() - temp);
 									cout << ert[i]->getLife() << " ! " << ert[j]->getLife() << endl;
+									m_Sound->PlaySound(soundCS, false, 0.2f);
 								}
 							}
 							if (ert[i]->getLife() <= 0) {
 								delete ert[i];
 								ert[i] = NULL;
+								
 							}
 							if (ert[j]->getLife() <= 0) {
 								delete ert[j];

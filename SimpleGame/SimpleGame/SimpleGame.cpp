@@ -11,7 +11,6 @@ but WITHOUT ANY WARRANTY.
 #include <iostream>
 #include <random>
 #include <math.h>
-#include <chrono>
 #include <Windows.h>
 #include "Dependencies\glew.h"
 #include "Dependencies\freeglut.h"
@@ -58,6 +57,7 @@ void MouseInput(int button, int state, int x, int y)
 			asd->makeObject(x - 250, 400 - y,OBJECT_CHARACTER,TEAM_2);
 			timebuf = 0;
 		}
+		
 	}
 	RenderScene();
 }
