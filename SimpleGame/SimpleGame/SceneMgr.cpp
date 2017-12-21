@@ -27,7 +27,7 @@ SceneMgr::SceneMgr()
 
 	m_texCharacter = g_Renderer->CreatePngTexture("./Textures/PNGs/minion.png");
 	m_texCharacter2 = g_Renderer->CreatePngTexture("./Textures/PNGs/animal.png");
-	m_texBackground = g_Renderer->CreatePngTexture("./Textures/PNGs/man.png");
+	m_texBackground = g_Renderer->CreatePngTexture("./Textures/PNGs/BackGround.png");
 	m_texCharacterP = g_Renderer->CreatePngTexture("./Textures/PNGs/player1.png");
 	m_particle = g_Renderer->CreatePngTexture("./Textures/PNGs/obtacle3.png");
 	soundBG = m_Sound->CreateSound("./Dependencies/SoundSamples/star4.mp3");
@@ -48,7 +48,7 @@ void SceneMgr::makeObject(float x, float y, int type, int teamtype)
 {
 	ert[i] = new Object;
 	if(type == OBJECT_BACKGROUND)
-		ert[i]->setAll(x, y, 0, 800, 1, 1, 0, 1, 0, 0, 0, 500, 10000000, OBJECT_BACKGROUND, teamtype);
+		ert[i]->setAll(x, y, 0, 800, 1, 1, 1, 1, 0, 0, 0, 500, 10000000, OBJECT_BACKGROUND, teamtype);
 	else if (type == OBJECT_BUILDING)
 		ert[i]->setAll(x, y, 0, 100, 1, 1, 0, 1, 0, 0, 0, 500, 10000000, OBJECT_BUILDING, teamtype);
 	else if (type == OBJECT_CHARACTER) {
@@ -74,9 +74,9 @@ void SceneMgr::makeObject(float x, float y, int type, int teamtype)
 		float b = ui2(dre);
 		normalize(&a, &b);
 		if (teamtype == TEAM_1)
-			ert[i]->setAll(x, y, 0, 2, 1, 0, 0, 1, a, b, 300, 15, 10000000, OBJECT_BULLET, teamtype);
+			ert[i]->setAll(x, y, 0, 10, 1, 0, 0, 1, a, b, 300, 15, 1000000, OBJECT_BULLET, teamtype);
 		else if (teamtype == TEAM_2)
-			ert[i]->setAll(x, y, 0, 2, 0, 0, 1, 1, a, b, 300, 15, 10000000, OBJECT_BULLET, teamtype);
+			ert[i]->setAll(x, y, 0, 10, 0, 0, 1, 1, a, b, 300, 15, 1000000, OBJECT_BULLET, teamtype);
 	}
 	else
 		;
@@ -130,12 +130,14 @@ void SceneMgr::draw() {
 				g_Renderer->DrawSolidRectGauge(ert[i]->getX(), ert[i]->getY() + 30, ert[i]->getZ(), 40, 5, ert[i]->getR(), ert[i]->getG(), ert[i]->getB(), ert[i]->getA(), ert[i]->getLife() / 100, 0.2);
 			}
 			else if (ert[i]->getType() == OBJECT_BULLET) {
-				g_Renderer->DrawParticle(ert[i]->getX(), ert[i]->getY(), ert[i]->getZ(), ert[i]->getSize(), ert[i]->getR(), ert[i]->getG(), ert[i]->getB(), ert[i]->getA(), -ert[i]->getDirX(), -ert[i]->getDirY(), m_particle, ert[i]->time);
+				g_Renderer->DrawParticle(ert[i]->getX(), ert[i]->getY(), ert[i]->getZ(), ert[i]->getSize(), ert[i]->getR(), ert[i]->getG(), ert[i]->getB(), ert[i]->getA(), -ert[i]->getDirX(), -ert[i]->getDirY(), m_particle, ert[i]->time,0.1);
 			}
 			else
 				g_Renderer->DrawSolidRect(ert[i]->getX(), ert[i]->getY(), ert[i]->getZ(), ert[i]->getSize(), ert[i]->getR(), ert[i]->getG(), ert[i]->getB(), ert[i]->getA(), 0.2);
 		}
 	}
+	g_Renderer->DrawParticleClimate(0, 0, 0, 1, 1, 1, 1, 1, -0.1, -0.1, m_particle, ert[0]->time/1000, 0.01);
+
 	char yy[] = "Game Start";
 	g_Renderer->DrawText(0,0, GLUT_BITMAP_TIMES_ROMAN_24,1,0,0,yy);
 

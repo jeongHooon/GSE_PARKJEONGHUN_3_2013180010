@@ -14,6 +14,7 @@ Object::Object()
 	a = 1;
 	dirX = 1;
 	dirY = 1;
+	time = 0;
 }
 
 void Object::setAll(float x1, float y1, float z1, float size1, float r1, float g1, float b1, float a1, float dirX1, float dirY1, float velocity1, float life1, float lifetime1,int type1, int teamtype1)
@@ -38,9 +39,15 @@ void Object::setAll(float x1, float y1, float z1, float size1, float r1, float g
 
 void Object::Update(float eTime) {
 	float eTimeInSecond = eTime / 1000.f;
-	time += eTime;
-	if (getType() == OBJECT_BULLET)
-		time -= eTime * 3 / 4;
+
+	setLifeTime(getLifeTime() - eTime);
+	if (getType() == OBJECT_BULLET) {
+		time += eTimeInSecond*7/10;
+		if (time > 100)
+			time = 0;
+	}
+	else
+		time += eTime;
 	if (getType() == OBJECT_CHARACTER) {
 		if (getX() + (getDirX() * eTimeInSecond) >= 250) {
 			setX(250);
