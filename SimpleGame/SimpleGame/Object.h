@@ -5,11 +5,18 @@
 #define OBJECT_CHARACTER 02
 #define OBJECT_BULLET 03
 #define OBJECT_ARROW 04
+#define OBJECT_TANK 05
+#define OBJECT_TOWER1 06
+#define OBJECT_TOWER1B 061
+#define OBJECT_TOWER2 07
+#define OBJECT_TOWER2B 071
+#define OBJECT_HELI 8
 #define TEAM_1 10
 #define TEAM_2 20
 #define TEAM_NONE 30
 #define MAX_OBJECTS_COUNT 1000
-
+#define MAP_WIDTH 512
+#define MAP_HEIGHT 800
 using namespace std;
 class Object
 {
@@ -30,6 +37,7 @@ class Object
 	int teamtype;
 public:
 	float time = 0;
+	bool heliStop = false;
 public:
 	Object();
 	Object(float x, float y, float z, float size, float r, float g, float b, float a, float dirX, float dirY, float velocity, float life, float lifetime,int type, int teamtype) :x(x), y(y), z(z), size(size), r(r), g(g), b(b), a(a), dirX(dirX), dirY(dirY), velocity(velocity), life(life), lifetime(lifetime),type(type), teamtype(teamtype) {}

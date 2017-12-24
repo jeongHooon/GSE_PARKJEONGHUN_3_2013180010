@@ -42,38 +42,51 @@ void Object::Update(float eTime) {
 
 	setLifeTime(getLifeTime() - eTime);
 	if (getType() == OBJECT_BULLET) {
-		time += eTimeInSecond*7/10;
+		time += eTimeInSecond * 7 / 10;
 		if (time > 100)
 			time = 0;
 	}
+	else if (getType() == OBJECT_BACKGROUND)
+		if (time >= 7000)
+			;
+		else
+			time += eTime;
 	else
 		time += eTime;
 	if (getType() == OBJECT_CHARACTER) {
-		if (getX() + (getDirX() * eTimeInSecond) >= 250) {
+		if (getX() + (getDirX() * eTimeInSecond) >= MAP_WIDTH / 2) {
 			setX(250);
 			setDirX(getDirX() * -1);
 		}
-		else if (getX() + (getDirX() * eTimeInSecond) <= -250) {
+		else if (getX() + (getDirX() * eTimeInSecond) <= -MAP_WIDTH / 2) {
 			setX(-250);
 			setDirX(getDirX() * -1);
 		}
-		else if (getY() + (getDirY() * eTimeInSecond) >= 400) {
+		else if (getY() + (getDirY() * eTimeInSecond) >= MAP_HEIGHT / 2) {
 			setY(400);
 			setDirY(getDirY() * -1);
 		}
-		else if (getY() + (getDirY() * eTimeInSecond) <= -400) {
+		else if (getY() + (getDirY() * eTimeInSecond) <= -MAP_HEIGHT / 2) {
 			setY(-400);
 			setDirY(getDirY() * -1);
 		}
 	}
+
 	if (getType() == OBJECT_ARROW || getType() == OBJECT_BULLET)
 	{
-		if (getX() > 250 || getX() < -250 || getY() > 400 || getY() < -400) {
+		if (getX() > MAP_WIDTH / 2 || getX() < -MAP_WIDTH / 2 || getY() > MAP_HEIGHT / 2 || getY() < -MAP_HEIGHT / 2) {
 			setLife(0);
 		}
 	}
-	setX(getX() + (getDirX() * getVelocity() * eTimeInSecond));
-	setY(getY() + (getDirY() * getVelocity() * eTimeInSecond));
+	if (getType() == OBJECT_HELI && heliStop)
+		;
+		/*m_Sound->PlaySound(soundBB, false, 0.2f);*/
+	else if (getType() == OBJECT_TOWER1 || getType() == OBJECT_TOWER2)
+		;
+	else {
+		setX(getX() + (getDirX() * getVelocity() * eTimeInSecond));
+		setY(getY() + (getDirY() * getVelocity() * eTimeInSecond));
+	}
 
 	
 	lifetime -= eTimeInSecond;

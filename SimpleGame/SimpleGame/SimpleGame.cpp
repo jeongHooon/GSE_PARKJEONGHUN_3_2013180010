@@ -46,18 +46,48 @@ void Idle(void)
 	RenderScene();
 }
 
+bool CollisionFunc(float minX, float minY, float maxX, float maxY, float minX1, float minY1, float maxX1, float maxY1) 
+{
+	if (minX > maxX1)
+		return false;
+	if (maxX < minX1)
+		return false;
+
+	if (minY > maxY1)
+		return false;
+	if (maxY < minY1)
+		return false;
+
+	return true;
+}
 void MouseInput(int button, int state, int x, int y)
 {
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
 		posXbuf = x;
 		posYbuf = y;
 	}
-	if (button == GLUT_LEFT_BUTTON && state == GLUT_UP) {
-		if (abs(posXbuf - x) < 5 && abs(posYbuf - y) < 5 && timebuf >= 7000 && (400-y) <=0 ) {
-			asd->makeObject(x - 250, 400 - y,OBJECT_CHARACTER,TEAM_2);
-			timebuf = 0;
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_UP && abs(posXbuf - x) < 5 && abs(posYbuf - y) < 5) {
+		if (asd->choice == OBJECT_HELI && (MAP_HEIGHT / 2 -y) <=0 && asd->ert[0]->time/1000 >= 5) {
+			asd->makeObject(x - MAP_WIDTH/2, MAP_HEIGHT/2 - y, OBJECT_HELI, TEAM_2);
+			asd->ert[0]->time -= 5000;
 		}
-		
+		else if (asd->choice == OBJECT_TOWER1 && (MAP_HEIGHT / 2 - y) <= 0 && asd->ert[0]->time / 1000 >= 7) {
+			asd->makeObject(x - MAP_WIDTH / 2, MAP_HEIGHT / 2 - y, OBJECT_TOWER1, TEAM_2);
+			asd->ert[0]->time -= 7000;
+		}
+		else if (asd->choice == OBJECT_TOWER2 && (MAP_HEIGHT / 2 - y) <= 0 && asd->ert[0]->time / 1000 >= 7) {
+			asd->makeObject(x - MAP_WIDTH / 2, MAP_HEIGHT / 2 - y, OBJECT_TOWER2, TEAM_2);
+			asd->ert[0]->time -= 7000;
+		}
+		if (CollisionFunc(posXbuf - MAP_WIDTH / 2, MAP_HEIGHT / 2 - posYbuf, posXbuf - MAP_WIDTH / 2, MAP_HEIGHT / 2 - posYbuf, 176 - 15, -384 - 15, 176 + 15, -384 + 15)) {
+			asd->choice = OBJECT_HELI;
+		}
+		else if (CollisionFunc(posXbuf - MAP_WIDTH / 2, MAP_HEIGHT / 2 - posYbuf, posXbuf - MAP_WIDTH / 2, MAP_HEIGHT / 2 - posYbuf, 208 - 15, -384 - 15, 208 + 15, -384 + 15))
+			asd->choice = OBJECT_TOWER1;
+		else if (CollisionFunc(posXbuf - MAP_WIDTH / 2, MAP_HEIGHT / 2 - posYbuf, posXbuf - MAP_WIDTH / 2, MAP_HEIGHT / 2 - posYbuf, 240 - 15, -384 - 15, 240 + 15, -384 + 15))
+			asd->choice = OBJECT_TOWER2;
+		else
+			asd->choice = 0;
 	}
 	RenderScene();
 }
@@ -78,7 +108,7 @@ int main(int argc, char **argv)
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
 	glutInitWindowPosition(0, 0);
-	glutInitWindowSize(500, 800);
+	glutInitWindowSize(MAP_WIDTH, MAP_HEIGHT);
 	glutCreateWindow("Game Software Engineering KPU");
 	
 	glewInit();
